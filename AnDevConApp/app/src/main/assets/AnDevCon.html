@@ -1,0 +1,115 @@
+<html>
+  <head>
+    My custom js Interface
+  </head>
+  <body>
+    <br>
+    <input type="button" value="Get Location" onClick="bridgeToJava.getUserLocation()" />
+    <br>
+    <input type="button" value="Create Calander Event" onClick="bridgeToJava.createCalendarEvent()" />
+    <br>
+    <input type="button" value="Get Encrypted ID" onClick="bridgeToJava.getEncryptedId()" />
+    <br>
+    <p id="output">Output</p>
+    <script type="text/javascript">
+      window.bridgeFromJava = bridgeFromJava = {};
+
+      // Helper function to output to HTML
+      function output(message) {
+          document.getElementById("output").innerHTML = message;
+      }
+
+      // Unified call that takes a serialized call and invokes it in JavaScript
+      bridgeFromJava.receiveCallFromJava = function(serializedCall) {
+          output("Trying to call: " + serializedCall);
+          if (serializedCall.method !== null) {
+              // Invoke method on this object with apply
+              this[serializedCall.method].apply(this, serializedCall.parameters)
+          }
+      }
+
+      // Callback from Java to receive GPS location
+      bridgeFromJava.onLocation = function(location) {
+          output("User location found at lat: " + location.lat + ", long: " + location.lon);
+      }
+
+      // Callback from Java that it could not find GPS location
+      bridgeFromJava.onLocationFailed = function() {
+          output("Failed to find user location");
+      }
+
+      // Callback from Java returning encrypted id
+      bridgeFromJava.onEncryptedId = function(id) {
+          output("Got encrypted id: " + id);
+      }
+
+      window.bridgeToJava = bridgeToJava = {};
+
+      // Call Java to get the Users GPS location
+      bridgeToJava.getUserLocation = function() {
+          output("Finding user location");
+          //AnDevConJavaBridge.findUserLocation();
+
+          var javaMethodCall = {
+            method: "findUserLocation",
+            parameters: null
+          }
+
+          AnDevConJavaBridge.invokeJavaMethod(JSON.stringify(javaMethodCall));
+      }
+
+      // Call Java to create calender event
+      bridgeToJava.createCalendarEvent = function() {
+          // Build ojbect to represent calendar event
+          var message = {
+              description: "AnDevCon Talk",
+              location: "Santa Clara",
+              summary: "Talk about bridging different languages to Android",
+              start: {
+                  year: 2015,
+                  month: 11,
+                  day: 3,
+                  hour: 11,
+                  min: 0
+              },
+              end: {
+                  year: 2015,
+                  month: 11,
+                  day: 3,
+                  hour: 12,
+                  min: 15
+              }
+          }
+          output("Creating calander event");
+
+          // Calling directly to Java method
+          //AnDevConJavaBridge.createCalendarEvent(JSON.stringify(message));
+
+          // Calling Java method via unified serialized call
+          var javaMethodCall = {
+            method: "createCalendarEvent",
+            parameters: message
+          }
+
+          AnDevConJavaBridge.invokeJavaMethod(JSON.stringify(javaMethodCall));
+      }
+
+      // Call Java (which in turn calls C) to get encrypted id for user
+      bridgeToJava.getEncryptedId = function() {
+          output("Get users encrypted id");
+
+          // Calling directly to Java method
+          //AnDevConJavaBridge.getEncryptedId();
+
+          // Calling Java method via unified serialized call
+          var javaMethodCall = {
+            method: "getEncryptedId",
+            parameters: null
+          }
+
+          AnDevConJavaBridge.invokeJavaMethod(JSON.stringify(javaMethodCall));
+      }
+
+    </script>
+    <body>
+</html>
