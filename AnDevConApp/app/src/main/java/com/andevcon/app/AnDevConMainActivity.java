@@ -1,7 +1,9 @@
 package com.andevcon.app;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
@@ -12,8 +14,13 @@ public class AnDevConMainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.web_view);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
+
         // Find reference to WebView
         WebView webView = (WebView) findViewById(R.id.webview);
+        webView.setWebChromeClient(new WebChromeClient());
 
         // Enable JavaScript
         WebSettings webSettings = webView.getSettings();
