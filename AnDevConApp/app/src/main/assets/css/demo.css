@@ -1,0 +1,44 @@
+.header{
+  background-color:#5cd6ff;
+  color: white;
+  text-align: center;
+  padding:20px;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+.screen{
+  display:none;
+}
+
+.loading-screen.screen {
+  display:block;
+}
+
+.loader{
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   width: 200px;
+   height: 200px;
+   margin-top: -100px; /* Half the height */
+   margin-left: -100px; /* Half the width */
+}
+
+.apt-times{
+  text-align: center;
+}
+
+.apt-times button{
+  width:70%;
+  margin-top:20px;
+}
+.confirmation-screen{
+  text-align: center;
+}
+.confirmation-screen p{
+  width:75%;
+  text-align: left;
+  margin:auto;
+  margin-top: 10px;
+}

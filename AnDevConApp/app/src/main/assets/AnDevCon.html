@@ -1,23 +1,87 @@
-<html>
-  <head>
-    My custom js Interface
-  </head>
-  <body>
-    <br>
-    <input type="button" value="Get Location" onClick="bridgeToJava.getUserLocation()" />
-    <br>
-    <input type="button" value="Create Calander Event" onClick="bridgeToJava.createCalendarEvent()" />
-    <br>
-    <input type="button" value="Get Encrypted ID" onClick="bridgeToJava.getEncryptedId()" />
-    <br>
-    <p id="output">Output</p>
-    <script type="text/javascript">
-      window.bridgeFromJava = bridgeFromJava = {};
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My custom js Interface</title>
 
-      // Helper function to output to HTML
-      function output(message) {
-          document.getElementById("output").innerHTML = message;
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/demo.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="header">
+    Admission Pro
+</div>
+<div class="loading-screen screen">
+    <svg class="loader" width='200px' height='200px' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="uil-ripple"><rect x="0" y="0" width="100" height="100" fill="none" class="bk"></rect><g> <animate attributeName="opacity" dur="2s" repeatCount="indefinite" begin="0s" keyTimes="0;0.33;1" values="1;1;0"></animate><circle cx="50" cy="50" r="40" stroke="#afafb7" fill="none" stroke-width="6" stroke-linecap="round"><animate attributeName="r" dur="2s" repeatCount="indefinite" begin="0s" keyTimes="0;0.33;1" values="0;22;44"></animate></circle></g><g><animate attributeName="opacity" dur="2s" repeatCount="indefinite" begin="1s" keyTimes="0;0.33;1" values="1;1;0"></animate><circle cx="50" cy="50" r="40" stroke="#5cffd6" fill="none" stroke-width="6" stroke-linecap="round"><animate attributeName="r" dur="2s" repeatCount="indefinite" begin="1s" keyTimes="0;0.33;1" values="0;22;44"></animate></circle></g></svg>
+</div>
+<div class="form-screen screen">
+    <div style="width:100%;text-align:center"><h4>Welcome <span id="output"></span>!</h4></div>
+
+
+    <form>
+        <div class="form-group">
+            <label for="exampleInputEmail1">What brings you to the hospital today?</label>
+            <select class="form-control" >
+                <option value="toe">I stubbed my toe on my evil coffee table.</option>
+                <option value="arm">My arm seems to be missing.</option>
+                <option value="nickelback">I have started to enjoy the musical stylings of Nickelback.</option>
+                <option value="taste">When I sneeze I taste the color purple.</option>
+            </select>
+        </div>
+
+        <button onclick="switchToCalendarCreation(); return false;" class="btn btn-primary">Submit</button>
+    </form>
+
+
+
+</div>
+<div class="confirmation-screen screen">
+    <p>Dr. Michelle Rodriguez is our specialist for that condition.</p>
+    <p>Please select one of her available times to schedule an apointment:</p>
+    <div class="apt-times">
+        <button onclick="chooseApointment(12); return false;" class="btn btn-success">12/4/2015 at 12:15pm</button>
+        <button onclick="chooseApointment(13); return false;" class="btn btn-success">12/4/2015 at 1:15pm</button>
+        <button onclick="chooseApointment(14); return false;" class="btn btn-success">12/4/2015 at 2:15pm</button>
+        <button onclick="chooseApointment(15); return false;" class="btn btn-success">12/4/2015 at 3:15pm</button>
+    </div>
+</div>
+<script src="js/bridge.js" type="text/javascript"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+
+<!-- "App" functions -->
+<script type="text/javascript">
+      $(startApp)
+      function startApp(){
+        window.setTimeout(bridgeToJava.getUserLocation,2000);
       }
+      function switchToForm(){
+        $(".screen").hide();
+        $(".form-screen").show()
+      }
+      function switchToCalendarCreation(){
+        $(".screen").hide();
+        $(".confirmation-screen").show()
+      }
+      function chooseApointment(hour){
+        var condition = $("select option:selected").text();
+        bridgeToJava.createCalendarEvent(hour, condition);
+      }
+
+      // Helper function to output to log
+      function output(message) {
+          console.log(message);
+      }
+    </script>
+
+<!-- Bridge Code  -->
+<script type="text/javascript">
+      window.bridgeFromJava = bridgeFromJava = {};
 
       // Unified call that takes a serialized call and invokes it in JavaScript
       bridgeFromJava.receiveCallFromJava = function(serializedCall) {
@@ -30,17 +94,23 @@
 
       // Callback from Java to receive GPS location
       bridgeFromJava.onLocation = function(location) {
-          output("User location found at lat: " + location.lat + ", long: " + location.lon);
+        output(location);
+        // we could look up the hospital since we have the user's location, but let's not...
+        confirm("It looks like you are at Our Motherboard of Perpetual Grace General Hospital, is this correct?");
+        bridgeToJava.getEncryptedId();
       }
 
       // Callback from Java that it could not find GPS location
       bridgeFromJava.onLocationFailed = function() {
-          output("Failed to find user location");
+          console.log("Failed to find user location");
       }
 
       // Callback from Java returning encrypted id
       bridgeFromJava.onEncryptedId = function(id) {
           output("Got encrypted id: " + id);
+          // We could look up the user based on device ID, but let's not
+          document.getElementById("output").innerHTML = "Jamie Johnson ("+id+")";
+          window.switchToForm();
       }
 
       window.bridgeToJava = bridgeToJava = {};
@@ -59,25 +129,25 @@
       }
 
       // Call Java to create calender event
-      bridgeToJava.createCalendarEvent = function() {
+      bridgeToJava.createCalendarEvent = function(hour, condition) {
           // Build ojbect to represent calendar event
           var message = {
-              description: "AnDevCon Talk",
-              location: "Santa Clara",
-              summary: "Talk about bridging different languages to Android",
+              description: "Discuss with Dr. Rodriguez my concerns about the fact that "+condition,
+              location: "Our Motherboard of Perpetual Grace General Hospital",
+              summary: "Appointment with Dr. Rodriguez",
               start: {
                   year: 2015,
-                  month: 11,
-                  day: 3,
-                  hour: 11,
-                  min: 0
+                  month: 12,
+                  day: 4,
+                  hour: hour,
+                  min: 15
               },
               end: {
                   year: 2015,
-                  month: 11,
-                  day: 3,
-                  hour: 12,
-                  min: 15
+                  month: 12,
+                  day: 4,
+                  hour: hour+1,
+                  min: 0
               }
           }
           output("Creating calander event");
@@ -111,5 +181,5 @@
       }
 
     </script>
-    <body>
+</body>
 </html>
