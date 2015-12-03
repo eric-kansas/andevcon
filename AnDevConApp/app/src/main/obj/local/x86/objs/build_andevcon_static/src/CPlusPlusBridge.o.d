@@ -1,5 +1,5 @@
-obj/local/x86/objs/build_andevcon_static/src/CPlusPlusBridge.o: \
- jni/src/CPlusPlusBridge.c \
+/Users/eheaney/andevcon/AnDevConApp/app/src/main/obj/local/x86/objs/build_andevcon_static/src/CPlusPlusBridge.o: \
+ /Users/eheaney/andevcon/AnDevConApp/app/src/main/jni/src/CPlusPlusBridge.c \
  /usr/local/Cellar/android-ndk/r10d/platforms/android-9/arch-x86/usr/include/stdio.h \
  /usr/local/Cellar/android-ndk/r10d/platforms/android-9/arch-x86/usr/include/sys/cdefs.h \
  /usr/local/Cellar/android-ndk/r10d/platforms/android-9/arch-x86/usr/include/sys/cdefs_elf.h \
@@ -25,7 +25,7 @@ obj/local/x86/objs/build_andevcon_static/src/CPlusPlusBridge.o: \
  /usr/local/Cellar/android-ndk/r10d/platforms/android-9/arch-x86/usr/include/strings.h \
  /usr/local/Cellar/android-ndk/r10d/platforms/android-9/arch-x86/usr/include/memory.h \
  /usr/local/Cellar/android-ndk/r10d/platforms/android-9/arch-x86/usr/include/ctype.h \
- jni/src/com_andevcon_app_CPlusPlusBridge.h \
+ /Users/eheaney/andevcon/AnDevConApp/app/src/main/jni/src/com_andevcon_app_CPlusPlusBridge.h \
  /usr/local/Cellar/android-ndk/r10d/platforms/android-9/arch-x86/usr/include/jni.h
 
 /usr/local/Cellar/android-ndk/r10d/platforms/android-9/arch-x86/usr/include/stdio.h:
@@ -78,6 +78,6 @@ obj/local/x86/objs/build_andevcon_static/src/CPlusPlusBridge.o: \
 
 /usr/local/Cellar/android-ndk/r10d/platforms/android-9/arch-x86/usr/include/ctype.h:
 
-jni/src/com_andevcon_app_CPlusPlusBridge.h:
+/Users/eheaney/andevcon/AnDevConApp/app/src/main/jni/src/com_andevcon_app_CPlusPlusBridge.h:
 
 /usr/local/Cellar/android-ndk/r10d/platforms/android-9/arch-x86/usr/include/jni.h:

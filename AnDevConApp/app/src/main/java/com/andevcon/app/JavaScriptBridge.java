@@ -148,9 +148,11 @@ public class JavaScriptBridge implements UserLocation.LocationListener {
         // Call method via reflection
         try {
             if (parameters == null) {
+                // Call method with no parameters
                 Method m = JavaScriptBridge.class.getMethod(methodName);
                 m.invoke(this);
             } else {
+                // Call method with paramters
                 Method m = JavaScriptBridge.class.getMethod(methodName, String.class);
                 m.invoke(this, parameters.toString());
             }
